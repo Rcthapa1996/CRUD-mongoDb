@@ -1,4 +1,6 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectID } = require("mongodb");
+// const ObjectID = require('mongodb').ObjectID,
+
 const url =
   "mongodb+srv://Rcthapa1996:Kg7yD2OmGuQPupLW@account.2qtupvp.mongodb.net/?retryWrites=true&w=majority";
 const { v4: uuidv4 } = require("uuid");
@@ -62,7 +64,7 @@ function getClient(url) {
 async function insertDataFromDB(collection, data) {
   const allData = [];
 
-  const result = await collection.insertOne(data);
+  const result = await collection.insertOne({ id: uuidv4(), ...data });
   console.log(
     `A document was inserted with the _id:::::::::::::::: ${result.insertedId}`
   );
@@ -77,16 +79,46 @@ async function getDataFromDB(collection) {
 
   const allDataCursor = await collection.find();
   await allDataCursor.forEach((data) => allData.push(data));
+  console.log("All Data", allData);
   return allData;
 }
 async function updateDataFromDB(collection, id, data) {
   const allData = [];
+  // const objId = new ObjectID(id).toString();
+  const filter = { id: id };
+  // const filter = { title: "New" };
+  // update the value of the 'quantity' field to 5
+  // const updateDocument = {
+  //   $set: {
+  //     name: data.name,
+  //   },
+  // };
+  console.log("name:", data.name, " Id: ", id);
+  const result = await collection.replaceOne(filter, data);
+  // const result = await collection.updateOne(filter, updateDocument);
+  console.log("Result from Update: ", result);
+
   const allDataCursor = await collection.find();
   await allDataCursor.forEach((data) => allData.push(data));
   return allData;
 }
 async function deleteDataFromDB(collection, id) {
   const allData = [];
+
+  const filter = { id: id };
+  const deleteResult = await collection.deleteOne(filter);
+  console.log("Deleted Item: ", deleteResult);
+
+  const allDataCursor = await collection.find();
+  await allDataCursor.forEach((data) => allData.push(data));
+  return allData;
+}
+async function deleteAllDataFromDB(collection) {
+  const allData = [];
+
+  const deleteResult = await collection.deleteMany({});
+  console.log("Deleted All Item: ", deleteResult);
+
   const allDataCursor = await collection.find();
   await allDataCursor.forEach((data) => allData.push(data));
   return allData;
@@ -130,7 +162,7 @@ async function getData() {
 }
 
 async function updateData(id, data) {
-  console.log("Received Id for update", id);
+  console.log("Received Id for update", id, data);
 
   let client = getClient(url);
   let allData = [];
@@ -177,11 +209,27 @@ async function deleteData(id) {
   // return { ack: "deleted", id: id };
 }
 
+async function deleteAllData() {
+  console.log("Deleteting all Data");
+
+  let client = getClient(url);
+  let allData = [];
+  try {
+    const collection = getCollection(client, "AccountDetails", "Account");
+    allData = await deleteAllDataFromDB(collection);
+    console.log("all Data: ", allData);
+  } finally {
+    await client.close();
+  }
+  return allData;
+}
+
 module.exports = {
   addData,
   getData,
   updateData,
   deleteData,
+  deleteAllData,
 };
 
 async function runNew() {

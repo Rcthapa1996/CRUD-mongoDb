@@ -20,15 +20,21 @@ app.use(cors());
 // adding morgan to log HTTP requests
 app.use(morgan("combined"));
 
-const { addData, getData, updateData, deleteData } = require("./configs/db.js");
+const {
+  addData,
+  getData,
+  updateData,
+  deleteData,
+  deleteAllData,
+} = require("./configs/db.js");
 
 app.post("/add", async (req, res) => {
-  const allDatas = await addData(req.body.data);
+  const allDatas = await addData(req.body);
   res.send(allDatas);
   console.log(req.body);
 });
 
-app.get("/datas", async (req, res) => {
+app.get("/data", async (req, res) => {
   const allDatas = await getData();
   res.send(allDatas);
   console.log(req.body);
@@ -43,6 +49,12 @@ app.put("/update", async (req, res) => {
 
 app.delete("/delete", async (req, res) => {
   const allDatas = await deleteData(req.body.id);
+  res.send(allDatas);
+  console.log(req.body);
+});
+
+app.delete("/deleteAll", async (req, res) => {
+  const allDatas = await deleteAllData(req.body.id);
   res.send(allDatas);
   console.log(req.body);
 });
