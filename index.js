@@ -59,37 +59,99 @@ app.delete("/deleteAll", async (req, res) => {
   console.log(req.body);
 });
 
+// Account
+app.post("/accounts", async (req, res) => {
+  const allDatas = await addData(req.body);
+  res.send(allDatas);
+  console.log(req.body);
+});
+
+app.get("/accounts", async (req, res) => {
+  const allDatas = await getData();
+  res.send(allDatas);
+  console.log(req.body);
+});
+
+app.get("/accounts/:accountId", async (req, res) => {
+  const { accountId } = req.params;
+  const allDatas = await getData();
+  // const allDatas = { accountId: req.params.accountId };
+  console.log("accountId:::::::::::::::::: ", accountId);
+  res.send({ data: allDatas, accountId: accountId });
+
+  // const allDatas = await getData();
+  // res.send(allDatas);
+  console.log(req.body);
+});
+
+app.put("//accounts/:accountId", async (req, res) => {
+  const { accountId } = req.params;
+  const allDatas = await updateData(id, data);
+  res.send(allDatas);
+  console.log(req.body);
+});
+
+app.delete("/accounts/:accountId", async (req, res) => {
+  const { accountId } = req.params;
+  const allDatas = await deleteData(req.body.id);
+  res.send(allDatas);
+  console.log(req.body);
+});
+
+// Transactions
+app.post("/accounts/:accountId/transactions", async (req, res) => {
+  const { accountId } = req.params;
+  console.log(accountId);
+  const allDatas = await addData(req.body);
+  res.send(allDatas);
+  res.send(accountId);
+  console.log(req.body);
+});
+
+app.get("/accounts/:accountId/transactions", async (req, res) => {
+  const { accountId } = req.params;
+  console.log(accountId);
+  const allDatas = await getData();
+  // res.send(allDatas);
+  res.send(accountId);
+  console.log(req.body);
+});
+
+app.get(
+  "/accounts/:accountId/transactions/:transactionId",
+  async (req, res) => {
+    // const allDatas = await getData();
+    const { accountId, transactionId } = req.params;
+    console.log(accountId, transactionId);
+    // const allDatas = { accountId: accountId };
+    console.log("accountId:::::::::::::::::: ", accountId);
+    // res.send({ data: allDatas, accountId: accountId });
+    res.send({ accountId, transactionId });
+    console.log(req.body);
+  }
+);
+
+app.put(
+  "//accounts/:accountId/transactions/:transactionId",
+  async (req, res) => {
+    const { accountId, transactionId } = req.params;
+    const allDatas = await updateData(id, data);
+    res.send(allDatas);
+    console.log(req.body);
+  }
+);
+
+app.delete(
+  "/accounts/:accountId/transactions/:transactionId",
+  async (req, res) => {
+    const { accountId, transactionId } = req.params;
+    const allDatas = await deleteData(req.body.id);
+    res.send(allDatas);
+    console.log(req.body);
+  }
+);
+
 // starting the server
 app.listen(3002, () => {
   console.log("listening on port 3002");
 });
-
-// // defining an endpoint to return all ads
-// app.get("/", (req, res) => {
-//   res.send([{ name: "hello" }]);
-// });
-// app.get("/callChatGpt", (req, res) => {
-//   res.send([{ name: "hello" }]);
-// });
-// app.get("/account", async (req, res) => {
-//   const data = await runNew();
-//   console.log("Daaaaaa Retun: ", data);
-//   res.send([data]);
-// });
-
-// app.post("/", (req, res) => {
-//   console.log("req/:", req);
-//   res.send("req");
-// });
-
-// app.post("/account", (req, res) => {
-//   // const newData = { ...req.body, id: account.length + 1 };
-//   // account.push(newData);
-//   // console.log("req/account:", req, account);
-//   // res.send([newData]);
-// });
-
-// app.get("/account/name", (req, res) => {
-//   // const nameList = account.map(a => a.name);
-//   // res.send([nameList]);
-// });
