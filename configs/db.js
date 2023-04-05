@@ -1,5 +1,4 @@
-const { MongoClient, ObjectID } = require("mongodb");
-// const ObjectID = require('mongodb').ObjectID,
+const { MongoClient } = require("mongodb");
 
 const url =
   "mongodb+srv://Rcthapa1996:Kg7yD2OmGuQPupLW@account.2qtupvp.mongodb.net/?retryWrites=true&w=majority";
