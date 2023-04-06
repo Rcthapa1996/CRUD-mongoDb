@@ -21,134 +21,61 @@ app.use(cors());
 app.use(morgan("combined"));
 
 const {
-  addData,
-  getData,
+  createData,
+  getAllData,
   updateData,
   deleteData,
   deleteAllData,
-} = require("./configs/db.js");
+} = require("./utils/crudEndpoints");
 
-app.post("/add", async (req, res) => {
-  const allDatas = await addData(req.body);
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.post("/add", createData);
 
-app.get("/data", async (req, res) => {
-  const allDatas = await getData();
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.get("/data", getAllData);
 
-app.put("/update", async (req, res) => {
-  const { id, data } = req.body;
-  const allDatas = await updateData(id, data);
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.put("/update", updateData);
 
-app.delete("/delete", async (req, res) => {
-  const allDatas = await deleteData(req.body.id);
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.delete("/delete", deleteData);
 
-app.delete("/deleteAll", async (req, res) => {
-  const allDatas = await deleteAllData(req.body.id);
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.delete("/deleteAll", deleteAllData);
+
+const {
+  createNewAccount,
+  getAllAccounts,
+  getAccountById,
+  updateAccount,
+  deleteAccount,
+} = require("./utils/accountEndpoints.js");
 
 // Account
-app.post("/accounts", async (req, res) => {
-  const allDatas = await addData(req.body);
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.post("/accounts", createNewAccount);
 
-app.get("/accounts", async (req, res) => {
-  const allDatas = await getData();
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.get("/accounts", getAllAccounts);
 
-app.get("/accounts/:accountId", async (req, res) => {
-  const { accountId } = req.params;
-  const allDatas = await getData();
-  // const allDatas = { accountId: req.params.accountId };
-  console.log("accountId:::::::::::::::::: ", accountId);
-  res.send({ data: allDatas, accountId: accountId });
+app.get("/accounts/:accountId", getAccountById);
 
-  // const allDatas = await getData();
-  // res.send(allDatas);
-  console.log(req.body);
-});
+app.put("//accounts/:accountId", updateAccount);
 
-app.put("//accounts/:accountId", async (req, res) => {
-  const { accountId } = req.params;
-  const allDatas = await updateData(id, data);
-  res.send(allDatas);
-  console.log(req.body);
-});
+app.delete("/accounts/:accountId", deleteAccount);
 
-app.delete("/accounts/:accountId", async (req, res) => {
-  const { accountId } = req.params;
-  const allDatas = await deleteData(req.body.id);
-  res.send(allDatas);
-  console.log(req.body);
-});
-
+const {
+  createNewTransaction,
+  getAllTransactions,
+  getTransactionById,
+  updateTransaction,
+  deleteTransaction,
+} = require("./utils/transactionEndpoints");
 // Transactions
-app.post("/accounts/:accountId/transactions", async (req, res) => {
-  const { accountId } = req.params;
-  console.log(accountId);
-  const allDatas = await addData(req.body);
-  res.send(allDatas);
-  res.send(accountId);
-  console.log(req.body);
-});
+app.post("/accounts/:accountId/transactions", createNewTransaction);
 
-app.get("/accounts/:accountId/transactions", async (req, res) => {
-  const { accountId } = req.params;
-  console.log(accountId);
-  const allDatas = await getData();
-  // res.send(allDatas);
-  res.send(accountId);
-  console.log(req.body);
-});
+app.get("/accounts/:accountId/transactions", getAllTransactions);
 
-app.get(
-  "/accounts/:accountId/transactions/:transactionId",
-  async (req, res) => {
-    // const allDatas = await getData();
-    const { accountId, transactionId } = req.params;
-    console.log(accountId, transactionId);
-    // const allDatas = { accountId: accountId };
-    console.log("accountId:::::::::::::::::: ", accountId);
-    // res.send({ data: allDatas, accountId: accountId });
-    res.send({ accountId, transactionId });
-    console.log(req.body);
-  }
-);
+app.get("/accounts/:accountId/transactions/:transactionId", getTransactionById);
 
-app.put(
-  "//accounts/:accountId/transactions/:transactionId",
-  async (req, res) => {
-    const { accountId, transactionId } = req.params;
-    const allDatas = await updateData(id, data);
-    res.send(allDatas);
-    console.log(req.body);
-  }
-);
+app.put("//accounts/:accountId/transactions/:transactionId", updateTransaction);
 
 app.delete(
   "/accounts/:accountId/transactions/:transactionId",
-  async (req, res) => {
-    const { accountId, transactionId } = req.params;
-    const allDatas = await deleteData(req.body.id);
-    res.send(allDatas);
-    console.log(req.body);
-  }
+  deleteTransaction
 );
 
 // starting the server
