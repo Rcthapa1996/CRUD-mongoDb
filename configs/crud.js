@@ -8,7 +8,7 @@ async function insertDataFromDB(collection, data) {
 
 async function getDataFromDB(collection) {
   const response = await collection.find().toArray();
-  return { response };
+  return response;
 }
 
 async function updateDataFromDB(collection, id, data) {

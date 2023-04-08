@@ -1,44 +1,59 @@
+const { connect } = require("../configs/db.js");
+const {
+  insertTransactionFromDB,
+  getTransactionFromDB,
+  getTransactionByIdFromDB,
+  updateTransactionFromDB,
+  deleteTransactionFromDB,
+  deleteAllTransactionFromDB,
+} = require("../configs/transaction");
+
 const createNewTransaction = async (req, res) => {
-  const { accountId } = req.params;
-  console.log(accountId);
-  const allDatas = await addData(req.body);
-  res.send(allDatas);
-  res.send(accountId);
-  console.log(req.body);
+  const { data } = req.body;
+  const response = await connect((collection) =>
+    insertTransactionFromDB(collection, data)
+  );
+  res.send(response);
 };
 
 const getAllTransactions = async (req, res) => {
-  const { accountId } = req.params;
-  console.log(accountId);
-  const allDatas = await getData();
-  // res.send(allDatas);
-  res.send(accountId);
-  console.log(req.body);
+  const response = await connect((collection) =>
+    getTransactionFromDB(collection)
+  );
+  res.send(response);
 };
 
 const getTransactionById = async (req, res) => {
-  // const allDatas = await getData();
-  const { accountId, transactionId } = req.params;
-  console.log(accountId, transactionId);
-  // const allDatas = { accountId: accountId };
-  console.log("accountId:::::::::::::::::: ", accountId);
-  // res.send({ data: allDatas, accountId: accountId });
-  res.send({ accountId, transactionId });
-  console.log(req.body);
+  const { id } = req.params;
+  const response = await connect((collection) =>
+    getTransactionByIdFromDB(collection, id)
+  );
+  res.send(response);
 };
 
 const updateTransaction = async (req, res) => {
-  const { accountId, transactionId } = req.params;
-  const allDatas = await updateData(id, data);
-  res.send(allDatas);
-  console.log(req.body);
+  const { TransactionId } = req.params;
+  const { data } = req.body;
+
+  const response = await connect((collection) =>
+    updateTransactionFromDB(collection, TransactionId, data)
+  );
+  res.send(response);
 };
 
 const deleteTransaction = async (req, res) => {
-  const { accountId, transactionId } = req.params;
-  const allDatas = await deleteData(req.body.id);
-  res.send(allDatas);
-  console.log(req.body);
+  const { id } = req.params;
+  const response = await connect((collection) =>
+    deleteTransactionFromDB(collection, id)
+  );
+  res.send(response);
+};
+
+const deleteAllTransaction = async (req, res) => {
+  const response = await connect((collection) =>
+    deleteAllTransactionFromDB(collection)
+  );
+  res.send(response);
 };
 
 module.exports = {
@@ -47,4 +62,5 @@ module.exports = {
   getTransactionById,
   updateTransaction,
   deleteTransaction,
+  deleteAllTransaction,
 };

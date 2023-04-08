@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 // defining the Express app
 const app = express();
@@ -19,6 +20,9 @@ app.use(cors());
 
 // adding morgan to log HTTP requests
 app.use(morgan("combined"));
+
+// adding cookies parser for set and get cookies
+app.use(cookieParser());
 
 const {
   createData,

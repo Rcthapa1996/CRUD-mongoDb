@@ -11,16 +11,22 @@ function getClient(URL) {
   return new MongoClient(URL);
 }
 
-async function connect(callback) {
+async function connect(callback, collectionName) {
   const client = getClient(URL);
+  let response = [];
   try {
-    const collection = getCollection(client, CLUSTER, COLLECTION_NAME);
-    const data = await callback(collection);
-    await client.close();
-    return data;
+    const collection = getCollection(
+      client,
+      CLUSTER,
+      collectionName || COLLECTION_NAME
+    );
+    response = await callback(collection);
+  } catch (e) {
+    response = { error: e };
   } finally {
     await client.close();
   }
+  return response;
 }
 
 module.exports = { connect };
